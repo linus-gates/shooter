@@ -1,0 +1,7 @@
+# Python
+*__pycache__/
+
+# Package build
+*.egg-info/
+build/
+dist/

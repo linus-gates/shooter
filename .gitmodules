@@ -1,0 +1,4 @@
+[submodule "external/boson-sdk"]
+	path = external/boson-sdk
+	url = git@github.com:linus-gates/python3-boson-sdk.git
+	branch = dev

@@ -1,0 +1,29 @@
+{
+  "exposure": {
+    "definition": "Set camera exposure",
+    "command": "set_exposure",
+    "params": {
+      "value": {
+        "definition": "Exposure value",
+        "type": "int",
+        "required": true
+      }
+    }
+  },
+  "ffc": {
+    "definition": "Run flat field correction",
+    "command": "run_ffc",
+    "params": {}
+  },
+  "zoom": {
+    "definition": "Set camera zoom level",
+    "command": "set_zoom",
+    "params": {
+      "level": {
+        "definition": "Zoom level",
+        "type": "float",
+        "required": true
+      }
+    }
+  }
+}
