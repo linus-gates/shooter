@@ -1,27 +1,721 @@
 {
-  "exposure": {
-    "definition": "Set camera exposure",
-    "command": "set_exposure",
+  "averager-mode": {
+    "definition": "Enable or disable smart frame averaging",
+    "command": "averager_mode",
     "params": {
-      "value": {
-        "definition": "Exposure value",
-        "type": "int",
+      "mode": {
+        "definition": "Averager state",
+        "type": "str",
+        "choices": [
+          "on",
+          "off"
+        ],
         "required": true
       }
     }
   },
-  "ffc": {
-    "definition": "Run flat field correction",
-    "command": "run_ffc",
+
+  "get-frame-rate": {
+    "definition": "Get video output frame rate in Hz",
+    "command": "dvoGetLcdVideoFrameRate",
     "params": {}
   },
-  "zoom": {
-    "definition": "Set camera zoom level",
-    "command": "set_zoom",
+
+  "set-frame-rate": {
+    "definition": "Set video output frame rate in Hz",
+    "command": "dvoSetLcdVideoFrameRate",
     "params": {
-      "level": {
-        "definition": "Zoom level",
+      "framerate": {
+        "definition": "Video frame rate in Hz",
+        "type": "int",
+        "choices": [30, 60],
+        "required": true
+      }
+    }
+  },
+
+  "get-color": {
+    "definition": "Get current color palette",
+    "command": "colorLutGetId",
+    "params": {}
+  },
+
+  "set-color": {
+    "definition": "Set color palette",
+    "command": "set_color",
+    "params": {
+      "color": {
+        "definition": "Color palette",
+        "type": "str",
+        "choices": [
+          "white-hot",
+          "black-hot",
+          "rainbow",
+          "rainbow-hc",
+          "ironbow",
+          "lava",
+          "arctic",
+          "globow",
+          "graded-fire",
+          "hottest"
+        ],
+        "required": true
+      }
+    }
+  },
+
+  "get-agc-mode": {
+    "definition": "Get current AGC mode",
+    "command": "agcGetMode",
+    "params": {}
+  },
+
+  "set-agc-mode": {
+    "definition": "Set automatic gain control mode",
+    "command": "set_agc_mode",
+    "params": {
+      "mode": {
+        "definition": "AGC processing mode",
+        "type": "str",
+        "choices": [
+          "normal",
+          "hold",
+          "threshold",
+          "auto-bright",
+          "auto-linear",
+          "manual"
+        ],
+        "required": true
+      }
+    }
+  },
+
+  "get-agc-tail-rejection": {
+    "definition": "Get AGC histogram tail rejection percentage",
+    "command": "agcGetOutlierCut",
+    "params": {}
+  },
+
+  "set-agc-tail-rejection": {
+    "definition": "Set AGC histogram tail rejection percentage",
+    "command": "agcSetOutlierCut",
+    "params": {
+      "data": {
+        "definition": "Tail rejection percentage",
         "type": "float",
+        "min": 0.0,
+        "max": 49.0,
+        "required": true
+      }
+    }
+  },
+
+  "get-agc-max-gain": {
+    "definition": "Get AGC maximum gain",
+    "command": "agcGetMaxGain",
+    "params": {}
+  },
+
+  "set-agc-max-gain": {
+    "definition": "Set AGC maximum gain",
+    "command": "agcSetMaxGain",
+    "params": {
+      "data": {
+        "definition": "Maximum AGC gain",
+        "type": "float",
+        "min": 0.3,
+        "max": 8.0,
+        "required": true
+      }
+    }
+  },
+
+  "get-agc-damping-factor": {
+    "definition": "Get AGC damping factor",
+    "command": "agcGetdf",
+    "params": {}
+  },
+
+  "set-agc-damping-factor": {
+    "definition": "Set AGC damping factor",
+    "command": "agcSetdf",
+    "params": {
+      "data": {
+        "definition": "AGC damping factor",
+        "type": "float",
+        "min": 0.0,
+        "max": 100.0,
+        "required": true
+      }
+    }
+  },
+
+  "get-agc-adaptive-contrast-enhancement": {
+    "definition": "Get AGC adaptive contrast enhancement",
+    "command": "agcGetGamma",
+    "params": {}
+  },
+
+  "set-agc-adaptive-contrast-enhancement": {
+    "definition": "Set AGC adaptive contrast enhancement",
+    "command": "agcSetGamma",
+    "params": {
+      "data": {
+        "definition": "Adaptive contrast enhancement value",
+        "type": "float",
+        "min": 0.5,
+        "max": 4.0,
+        "required": true
+      }
+    }
+  },
+
+  "get-agc-plateau-value": {
+    "definition": "Get AGC plateau value percentage",
+    "command": "agcGetPercentPerBin",
+    "params": {}
+  },
+
+  "set-agc-plateau-value": {
+    "definition": "Set AGC plateau value percentage",
+    "command": "agcSetPercentPerBin",
+    "params": {
+      "data": {
+        "definition": "Maximum percentage of pixels allowed in one histogram bin",
+        "type": "float",
+        "min": 0.0,
+        "max": 100.0,
+        "required": true
+      }
+    }
+  },
+
+  "get-agc-linear-percent": {
+    "definition": "Get AGC linear percentage",
+    "command": "agcGetLinearPercent",
+    "params": {}
+  },
+
+  "set-agc-linear-percent": {
+    "definition": "Set AGC linear percentage",
+    "command": "agcSetLinearPercent",
+    "params": {
+      "data": {
+        "definition": "Percentage of linear AGC processing",
+        "type": "float",
+        "min": 0.0,
+        "max": 100.0,
+        "required": true
+      }
+    }
+  },
+
+  "get-agc-detail-headroom": {
+    "definition": "Get AGC detail headroom",
+    "command": "agcGetDetailHeadroom",
+    "params": {}
+  },
+
+  "set-agc-detail-headroom": {
+    "definition": "Set AGC detail headroom",
+    "command": "agcSetDetailHeadroom",
+    "params": {
+      "data": {
+        "definition": "Headroom reserved for detail enhancement",
+        "type": "float",
+        "min": 0.0,
+        "max": 127.0,
+        "required": true
+      }
+    }
+  },
+
+  "get-agc-digital-detail-enhancement": {
+    "definition": "Get digital detail enhancement",
+    "command": "agcGetd2br",
+    "params": {}
+  },
+
+  "set-agc-digital-detail-enhancement": {
+    "definition": "Set digital detail enhancement",
+    "command": "agcSetd2br",
+    "params": {
+      "data": {
+        "definition": "Digital detail enhancement strength",
+        "type": "float",
+        "min": 0.0,
+        "max": 8.0,
+        "required": true
+      }
+    }
+  },
+
+  "get-agc-smoothing-factor": {
+    "definition": "Get DDE smoothing factor",
+    "command": "agcGetSigmaR",
+    "params": {}
+  },
+
+  "set-agc-smoothing-factor": {
+    "definition": "Set DDE smoothing factor",
+    "command": "agcSetSigmaR",
+    "params": {
+      "data": {
+        "definition": "DDE smoothing factor",
+        "type": "float",
+        "min": 0.0,
+        "max": 8191.0,
+        "required": true
+      }
+    }
+  },
+
+  "get-agc-information-based-mode": {
+    "definition": "Get AGC information-based equalization state",
+    "command": "agcGetUseEntropy",
+    "params": {}
+  },
+
+  "set-agc-information-based-mode": {
+    "definition": "Enable or disable AGC information-based equalization",
+    "command": "set_agc_information_based_mode",
+    "params": {
+      "mode": {
+        "definition": "Information-based AGC state",
+        "type": "str",
+        "choices": [
+          "on",
+          "off"
+        ],
+        "required": true
+      }
+    }
+  },
+
+  "flat-field-correction": {
+    "definition": "Enable or disable flat-field correction",
+    "command": "flat_field_correction",
+    "params": {
+      "mode": {
+        "definition": "Flat-field correction state",
+        "type": "str",
+        "choices": [
+          "on",
+          "off"
+        ],
+        "required": true
+      }
+    }
+  },
+
+  "gain-correction": {
+    "definition": "Enable or disable per-pixel gain correction",
+    "command": "gain_correction",
+    "params": {
+      "mode": {
+        "definition": "Gain correction state",
+        "type": "str",
+        "choices": [
+          "on",
+          "off"
+        ],
+        "required": true
+      }
+    }
+  },
+
+  "defect-replacement": {
+    "definition": "Enable or disable bad pixel defect replacement",
+    "command": "defect_replacement",
+    "params": {
+      "mode": {
+        "definition": "Defect replacement state",
+        "type": "str",
+        "choices": [
+          "on",
+          "off"
+        ],
+        "required": true
+      }
+    }
+  },
+
+  "column-filter": {
+    "definition": "Enable or disable spatial column noise reduction",
+    "command": "column_filter",
+    "params": {
+      "mode": {
+        "definition": "Column filter state",
+        "type": "str",
+        "choices": [
+          "on",
+          "off"
+        ],
+        "required": true
+      }
+    }
+  },
+
+  "temporal-filter": {
+    "definition": "Enable or disable temporal noise reduction",
+    "command": "temporal_filter",
+    "params": {
+      "mode": {
+        "definition": "Temporal filter state",
+        "type": "str",
+        "choices": [
+          "on",
+          "off"
+        ],
+        "required": true
+      }
+    }
+  },
+
+  "silent-shutterless-nuc": {
+    "definition": "Enable or disable Silent Shutterless NUC",
+    "command": "silent_shutterless_nuc",
+    "params": {
+      "mode": {
+        "definition": "Silent Shutterless NUC state",
+        "type": "str",
+        "choices": [
+          "on",
+          "off"
+        ],
+        "required": true
+      }
+    }
+  },
+
+  "supplemental-ffc": {
+    "definition": "Enable or disable supplemental flat-field correction",
+    "command": "supplemental_ffc",
+    "params": {
+      "mode": {
+        "definition": "Supplemental FFC state",
+        "type": "str",
+        "choices": [
+          "on",
+          "off"
+        ],
+        "required": true
+      }
+    }
+  },
+
+  "get-ffc-mode": {
+    "definition": "Get current flat-field correction mode",
+    "command": "bosonGetFFCMode",
+    "params": {}
+  },
+
+  "set-ffc-mode": {
+    "definition": "Set flat-field correction mode",
+    "command": "set_ffc_mode",
+    "params": {
+      "mode": {
+        "definition": "FFC operating mode",
+        "type": "str",
+        "choices": [
+          "manual",
+          "auto",
+          "external",
+          "shutter-test"
+        ],
+        "required": true
+      }
+    }
+  },
+
+  "get-ffc-period": {
+    "definition": "Get automatic FFC period in seconds",
+    "command": "bosonGetFFCFrameThreshold",
+    "params": {}
+  },
+
+  "set-ffc-period": {
+    "definition": "Set automatic FFC period in seconds",
+    "command": "bosonSetFFCFrameThreshold",
+    "params": {
+      "data": {
+        "definition": "FFC period in seconds",
+        "type": "int",
+        "min": 0,
+        "max": 7200,
+        "required": true
+      }
+    }
+  },
+
+  "get-ffc-temp-delta": {
+    "definition": "Get FFC temperature delta in degrees Celsius",
+    "command": "get_ffc_temp_delta",
+    "params": {}
+  },
+
+  "set-ffc-temp-delta": {
+    "definition": "Set FFC temperature delta in degrees Celsius",
+    "command": "set_ffc_temp_delta",
+    "params": {
+      "value": {
+        "definition": "Temperature change required to trigger FFC",
+        "type": "float",
+        "min": 0.0,
+        "max": 10.0,
+        "required": true
+      }
+    }
+  },
+  
+  "get-ffc-integration-period": {
+    "definition": "Get the number of frames integrated during FFC",
+    "command": "gaoGetNumFFCFrames",
+    "params": {}
+  },
+
+  "set-ffc-integration-period": {
+    "definition": "Set the number of frames integrated during FFC",
+    "command": "gaoSetNumFFCFrames",
+    "params": {
+      "data": {
+        "definition": "Number of frames integrated during FFC",
+        "type": "int",
+        "choices": [
+          2,
+          4,
+          8,
+          16
+        ],
+        "required": true
+      }
+    }
+  },
+
+  "get-ffc-warning-time": {
+    "definition": "Get FFC warning time in tenths of a second",
+    "command": "bosonGetFFCWarnTimeInSecx10",
+    "params": {}
+  },
+
+  "set-ffc-warning-time": {
+    "definition": "Set FFC warning time in tenths of a second",
+    "command": "bosonSetFFCWarnTimeInSecx10",
+    "params": {
+      "ffcWarnTime": {
+        "definition": "Warning time before FFC in tenths of a second",
+        "type": "int",
+        "min": 0,
+        "max": 50,
+        "required": true
+      }
+    }
+  },
+
+  "get-nuc-table": {
+    "definition": "Get the current NUC calibration table",
+    "command": "bosonGetTableNumber",
+    "params": {}
+  },
+
+  "set-nuc-table": {
+    "definition": "Set the NUC calibration table",
+    "command": "bosonSetTableNumber",
+    "params": {
+      "tableNumber": {
+        "definition": "NUC calibration table number",
+        "type": "int",
+        "choices": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "required": true
+      }
+    }
+  },
+
+  "save-power-on-defaults": {
+    "definition": "Save current camera settings as power-on defaults",
+    "command": "bosonWriteDynamicHeaderToFlash",
+    "params": {}
+  },
+
+  "restore-factory-defaults": {
+    "definition": "Restore camera settings from factory defaults",
+    "command": "restore_factory_defaults",
+    "params": {
+      "confirm": {
+        "definition": "Confirm factory-default restoration",
+        "type": "bool",
+        "required": true
+      }
+    }
+  },
+
+  "configuration-report": {
+    "definition": "Print all available camera configuration values",
+    "command": "configuration_report",
+    "params": {}
+  },
+
+  "ramp-enabled": {
+    "definition": "Enable or disable the internal diagnostic test ramp",
+    "command": "ramp_enabled",
+    "params": {
+      "mode": {
+        "definition": "Test ramp state",
+        "type": "str",
+        "choices": [
+          "on",
+          "off"
+        ],
+        "required": true
+      }
+    }
+  },
+
+  "get-roi-min": {
+    "definition": "Get the minimum pixel intensity in the image statistics ROI",
+    "command": "imageStatsGetFirstBinInROI",
+    "params": {}
+  },
+
+  "get-roi-max": {
+    "definition": "Get the maximum pixel intensity in the image statistics ROI",
+    "command": "imageStatsGetLastBinInROI",
+    "params": {}
+  },
+
+  "get-roi-mean": {
+    "definition": "Get the mean pixel intensity in the image statistics ROI",
+    "command": "imageStatsGetMeanInROI",
+    "params": {}
+  },
+
+  "get-defect-stats": {
+    "definition": "Get bad pixel replacement statistics",
+    "command": "bprGetStats",
+    "params": {}
+  },
+
+  "reboot-camera": {
+    "definition": "Reboot the Boson camera",
+    "command": "reboot_camera",
+    "params": {
+      "confirm": {
+        "definition": "Confirm camera reboot",
+        "type": "bool",
+        "required": true
+      }
+    }
+  },
+
+  "get-tfpa": {
+    "definition": "Get focal plane array temperature in degrees Celsius",
+    "command": "get_tfpa",
+    "params": {}
+  },
+
+  "get-imaging-status": {
+    "definition": "Get whether the camera output image is valid",
+    "command": "bosonGetImageValid",
+    "params": {}
+  },
+
+  "get-camera-software-version": {
+    "definition": "Get camera software version",
+    "command": "get_camera_software_version",
+    "params": {}
+  },
+
+  "get-camera-firmware-version": {
+    "definition": "Get camera firmware version",
+    "command": "get_camera_firmware_version",
+    "params": {}
+  },
+
+  "get-camera-product-number": {
+    "definition": "Get camera product number",
+    "command": "get_camera_product_number",
+    "params": {}
+  },
+
+  "get-camera-serial-number": {
+    "definition": "Get camera serial number",
+    "command": "bosonGetCameraSN",
+    "params": {}
+  },
+
+  "get-overtemp-threshold": {
+    "definition": "Get the core temperature threshold for entering low power mode in degrees Celsius",
+    "command": "bosonGetOverTempThreshold",
+    "params": {}
+  },
+
+  "get-core-temp": {
+    "definition": "Get the camera core temperature in degrees Celsius",
+    "command": "bosonGetMyriadTemp",
+    "params": {}
+  },
+
+  "get-low-power-state": {
+    "definition": "Get whether the camera is currently in low power mode",
+    "command": "bosonGetLowPowerMode",
+    "params": {}
+  },
+
+  "get-overtemp-status": {
+    "definition": "Get whether an overtemperature event has occurred",
+    "command": "bosonGetOverTempEventOccurred",
+    "params": {}
+  },
+
+  "get-overtemp-counter": {
+    "definition": "Get the number of overtemperature events",
+    "command": "bosonGetOverTempEventCounter",
+    "params": {}
+  },
+
+  "set-image-orientation": {
+    "definition": "Set image orientation",
+    "command": "set_image_orientation",
+    "params": {
+      "mode": {
+        "definition": "Image orientation mode",
+        "type": "str",
+        "choices": [
+          "normal",
+          "horizontal",
+          "vertical",
+          "both"
+        ],
+        "required": true
+      }
+    }
+  },
+
+  "get-image-mean-intensity": {
+    "definition": "Get the mean pixel intensity of the image",
+    "command": "imageStatsGetMean",
+    "params": {}
+  },
+
+  "do-ffc": {
+    "definition": "Run a flat-field correction (FFC)",
+    "command": "bosonRunFFC",
+    "params": {}
+  },
+
+  "video-freeze": {
+    "definition": "Freeze or unfreeze the video output",
+    "command": "video_freeze",
+    "params": {
+      "mode": {
+        "definition": "Video freeze state",
+        "type": "str",
+        "choices": ["on", "off"],
         "required": true
       }
     }

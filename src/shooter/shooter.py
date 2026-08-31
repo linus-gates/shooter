@@ -1,99 +1,80 @@
-#!/usr/bin/env python3
-
+import argcomplete
 import argparse
-import json
-import subprocess
 
 import shooter
 
-from pathlib import Path
+from shooter.executor import execute
+from shooter.json_parser import add_params
 
 
-TYPE_MAP = {
-    "str": str,
-    "int": int,
-    "float": float,
-    "bool": bool
-}
+DEFAULT_PORT = "/dev/ttyACM0"
 
 
-def load_config(path: str) -> dict:
-    with open(path, "r", encoding="utf-8") as file:
-        return json.load(file)
-
-
-def build_parser(config: dict) -> argparse.ArgumentParser:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="shooter",
-        description="Camera control CLI"
+        description="Boson camera control CLI",
+    )
+
+    parser.add_argument(
+        "--port",
+        default=DEFAULT_PORT,
+        help=f"Boson camera serial port (default: {DEFAULT_PORT})",
     )
 
     subparsers = parser.add_subparsers(
         dest="subcommand",
-        required=True
+        required=True,
     )
 
-    for subcommand_name, subcommand_config in config.items():
-
+    # Adding all subcommands defined in config
+    for command_name, command_config in shooter.config.items():
         subparser = subparsers.add_parser(
-            subcommand_name,
-            help=subcommand_config["definition"],
-            description=subcommand_config["definition"]
+            command_name,
+            help=command_config.get("definition", ""),
+            description=command_config.get("definition", ""),
         )
 
-        params = subcommand_config.get("params", {})
-
-        for param_name, param_config in params.items():
-
-            param_type = TYPE_MAP[param_config.get("type", "str")]
-
-            subparser.add_argument(
-                f"--{param_name}",
-                help=param_config["definition"],
-                type=param_type,
-                required=param_config.get("required", False)
-            )
+        add_params(
+            subparser,
+            command_config,
+        )
 
     return parser
 
 
-def build_command(
-    config: dict,
-    subcommand: str,
-    args: argparse.Namespace
-) -> str:
-
-    command_template = config[subcommand]["command"]
-
-    values = vars(args).copy()
-    values.pop("subcommand", None)
-
-    return command_template.format(**values)
-
-
-def execute_command(command: str):
-    print(f"Executing: {command}")
-
-    subprocess.run(
-        command,
-        shell=True,
-        check=True
-    )
-
-
 def main():
-    config = shooter.config
-    parser = build_parser(config)
+    parser = build_parser()
+
+    argcomplete.autocomplete(parser)
 
     args = parser.parse_args()
 
-    command = build_command(
-        config,
-        args.subcommand,
-        args
-    )
+    command_config = shooter.config[args.subcommand]
 
-    execute_command(command)
+    params = vars(args).copy()
+
+    params.pop("subcommand")
+    port = params.pop("port")
+
+    params = {
+        name: value
+        for name, value in params.items()
+        if value is not None
+    }
+
+    try:
+        result = execute(
+            command=command_config["command"],
+            port=port,
+            params=params,
+        )
+
+    except (ValueError, RuntimeError, OSError) as error:
+        parser.error(str(error))
+
+    if result is not None:
+        print(result)
 
 
 if __name__ == "__main__":

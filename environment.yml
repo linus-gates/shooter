@@ -3,3 +3,5 @@ name: shooter
 dependencies:
   - python>=3.10,<4
   - pip
+  - pip:
+    - -r requirements.txt

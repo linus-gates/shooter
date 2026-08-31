@@ -5,9 +5,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "shooter"
-version = "0.1.0"
 description = "Boson camera control"
-requires-python = ">=3.9"
+dynamic = ["version", "dependencies"]
 
 
 [tool.setuptools.packages.find]
@@ -19,6 +18,14 @@ where = [
 
 [tool.setuptools.package-data]
 shooter = ["conf/*.json"]
+
+
+[tool.setuptools.dynamic]
+version = {attr = "shooter.version.__version__"}
+dependencies = {file = [
+    "requirements/runtime.txt",
+    "external/boson-sdk/requirements/runtime.txt"
+]}
 
 
 [project.scripts]
